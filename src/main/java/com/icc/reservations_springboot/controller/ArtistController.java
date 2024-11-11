@@ -1,7 +1,7 @@
 package com.icc.reservations_springboot.controller;
 
 import java.util.List;
-//s
+
 import com.icc.reservations_springboot.model.Artist;
 import com.icc.reservations_springboot.service.ArtistService;
 
