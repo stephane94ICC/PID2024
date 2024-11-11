@@ -20,8 +20,12 @@ import jakarta.validation.Valid;
 
 @Controller
 public class ArtistController {
-    @Autowired
+    final
     ArtistService service;
+
+    public ArtistController(ArtistService service) {
+        this.service = service;
+    }
 
     @GetMapping("/artists")
     public String index(Model model) {
@@ -43,7 +47,46 @@ public class ArtistController {
         return "artist/show";
     }
 
+
+    @GetMapping("/artists/{id}/edit")
+    public String edit(Model model, @PathVariable("id") long id, HttpServletRequest request) {
+        Artist artist = service.getArtist(id);
+
+        model.addAttribute("artist", artist);
+
+
+        //Générer le lien retour pour l'annulation
+        String referrer = request.getHeader("Referer");
+
+        if(referrer!=null && !referrer.equals("")) {
+            model.addAttribute("back", referrer);
+        } else {
+            model.addAttribute("back", "/artists/"+artist.getId());
+        }
+
+        return "artist/edit";
+    }
+
+    @PutMapping("/artists/{id}/edit")
+    public String update(@Valid @ModelAttribute("artist") Artist artist, BindingResult bindingResult, @PathVariable("id") long id, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "artist/edit";
+        }
+
+        Artist existing = service.getArtist(id);
+
+        if(existing==null) {
+            return "artist/index";
+        }
+
+        service.updateArtist(id, artist);
+
+        return "redirect:/artists/"+artist.getId();
+    }
+
 }
+
 
 
 
