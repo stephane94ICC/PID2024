@@ -11,18 +11,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Data
-@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
-@Table(name="artists")
+@Table(name = "artists")
 public class Artist {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstname;
     private String lastname;
-
 }

@@ -1,6 +1,6 @@
 package com.icc.reservations_springboot.config;
 
-import com.icc.reservations_springboot.service.CustomUserDetailsService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

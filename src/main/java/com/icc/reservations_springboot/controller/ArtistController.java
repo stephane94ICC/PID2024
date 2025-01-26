@@ -82,7 +82,7 @@ public class ArtistController {
         service.updateArtist(id, artist);
         redirAttrs.addFlashAttribute("successMessage", "Artiste modifié avec succès.");
 
-        return "redirect:/artists" + artist.getId();
+        return "redirect:/artists/" + artist.getId();
     }
 
     @GetMapping("/artists/create")
@@ -107,7 +107,7 @@ public class ArtistController {
         service.addArtist(artist);
         redirAttrs.addFlashAttribute("successMessage", "Artiste créé avec succès.");
 
-        return "redirect:/artists" + artist.getId();
+        return "redirect:/artists/" + artist.getId();
     }
 
     @DeleteMapping("/artists/{id}")

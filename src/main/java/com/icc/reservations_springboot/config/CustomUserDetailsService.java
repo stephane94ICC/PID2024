@@ -1,4 +1,4 @@
-package com.icc.reservations_springboot.service;
+package com.icc.reservations_springboot.config;
 
 import java.util.ArrayList;
 import java.util.List;
