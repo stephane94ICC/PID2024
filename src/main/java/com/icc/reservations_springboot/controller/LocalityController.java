@@ -37,4 +37,5 @@ public class LocalityController {
         return "locality/show";
     }
 
+
 }
