@@ -12,6 +12,8 @@
     <div layout:fragment="content">
         <h1 th:text="|${artist.firstname}  ${artist.lastname}|">Bob Sull</h1>
 
+
+        <!-- formulaire de modification -->
         <form th:action="@{/artists/{id}/edit(id=${artist.id})}" th:object="${artist}" th:method="put">
             <div>
                 <label>Id:</label>
@@ -36,7 +38,7 @@
             </div>
         </form>
 
-        <nav><a th:href="@{/artists}">Retour à l'index</a></nav>
+        <nav><a th:href="@{/artists/}">Retour à l'index</a></nav>
     </div>
 </div>
 </body>
