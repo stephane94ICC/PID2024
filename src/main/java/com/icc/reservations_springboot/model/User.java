@@ -23,7 +23,11 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private List<Role> roles = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "users")
+    private List<Representation> representations = new ArrayList<>();
+
     protected User() {}
+
 
     public User(String login, String firstname, String lastname) {
         this.login = login;
@@ -110,12 +114,47 @@ public class User {
         return this;
     }
 
+    public List<Representation> getRepresentations() {
+        return representations;
+    }
+
+    public User addRepresentation(Representation representation) {
+        if(!this.representations.contains(representation)) {
+            this.representations.add(representation);
+            representation.addUser(this);
+        }
+
+        return this;
+    }
+
+    public User removeRepresentation(Representation representation) {
+        if(this.representations.contains(representation)) {
+            this.representations.remove(representation);
+            representation.getUsers().remove(this);
+        }
+
+        return this;
+    }
+
+
     @Override
     public String toString() {
-        return login + "(" + firstname + " " + lastname + ")";
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", langue='" + langue + '\'' +
+                ", created_at=" + created_at +
+                ", roles=" + roles +
+                ", representations=" + representations +
+                '}';
     }
 
     public String getRole() {
-        return "";
+        String o = null;
+        return o;
     }
 }
