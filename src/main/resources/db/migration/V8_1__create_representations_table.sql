@@ -1,7 +1,7 @@
 CREATE TABLE `representations`
 (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `show_id` int(11) NOT NULL,
+    `id`          int(11)     NOT NULL AUTO_INCREMENT,
+    `show_id`     int(11)     NOT NULL,
     `location_id` int(11) DEFAULT NULL,
     `when`        datetime(6) NOT NULL,
     PRIMARY KEY (id)

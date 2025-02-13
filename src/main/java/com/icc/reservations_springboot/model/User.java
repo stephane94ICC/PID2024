@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String login;
     private String password;
@@ -18,6 +24,11 @@ public class User {
     private String lastname;
     private String email;
     private String langue;
+
+    @Getter
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     private LocalDateTime created_at;
 
     @ManyToMany(mappedBy = "users")
@@ -26,78 +37,20 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private List<Representation> representations = new ArrayList<>();
 
-    protected User() {}
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
-
-    public User(String login, String firstname, String lastname) {
-        this.login = login;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.created_at = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
+    // Problème avec lombok !
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLangue() {
-        return langue;
-    }
-
-    public void setLangue(String langue) {
-        this.langue = langue;
     }
 
     public List<Role> getRoles() {
         return roles;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
     public User addRole(Role role) {
-        if(!this.roles.contains(role)) {
+        if (!this.roles.contains(role)) {
             this.roles.add(role);
             role.addUser(this);
         }
@@ -106,7 +59,7 @@ public class User {
     }
 
     public User removeRole(Role role) {
-        if(this.roles.contains(role)) {
+        if (this.roles.contains(role)) {
             this.roles.remove(role);
             role.getUsers().remove(this);
         }
@@ -119,7 +72,7 @@ public class User {
     }
 
     public User addRepresentation(Representation representation) {
-        if(!this.representations.contains(representation)) {
+        if (!this.representations.contains(representation)) {
             this.representations.add(representation);
             representation.addUser(this);
         }
@@ -128,7 +81,7 @@ public class User {
     }
 
     public User removeRepresentation(Representation representation) {
-        if(this.representations.contains(representation)) {
+        if (this.representations.contains(representation)) {
             this.representations.remove(representation);
             representation.getUsers().remove(this);
         }
@@ -136,25 +89,8 @@ public class User {
         return this;
     }
 
-
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", langue='" + langue + '\'' +
-                ", created_at=" + created_at +
-                ", roles=" + roles +
-                ", representations=" + representations +
-                '}';
-    }
-
-    public String getRole() {
-        String o = null;
-        return o;
+        return login + "(" + firstname + " " + lastname + " - " + role + ")";
     }
 }

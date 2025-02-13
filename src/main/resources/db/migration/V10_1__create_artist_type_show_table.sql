@@ -1,12 +1,15 @@
 --
 -- Structure de la table `artist_type_show`
 --
-CREATE TABLE `artist_type_show` (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `artist_type_id` int(11) NOT NULL,
-                                    `show_id` int(11) NOT NULL,
-                                    PRIMARY KEY(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE `artist_type_show`
+(
+    `id`             int(11) NOT NULL AUTO_INCREMENT,
+    `artist_type_id` int(11) NOT NULL,
+    `show_id`        int(11) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Index pour la table `artist_type_show`

@@ -21,7 +21,7 @@ public class Locality {
     private String postalCode;
     private String locality;
 
-    @OneToMany( targetEntity=Location.class, mappedBy="locality" )
+    @OneToMany(mappedBy = "locality")
     private List<Location> locations = new ArrayList<>();
 
     protected Locality() { }

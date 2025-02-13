@@ -2,60 +2,70 @@ package com.icc.reservations_springboot.model;
 
 import com.github.slugify.Slugify;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
-@Table(name="shows")
+@Table(name = "shows")
 public class Show {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String slug;
 
     private String title;
     private String description;
 
-    @Column(name="poster_url")
+    @Column(name = "poster_url")
     private String posterUrl;
 
     /**
      * Lieu de création du spectacle
      */
     @ManyToOne
-    @JoinColumn(name="location_id", nullable=true)
+    @JoinColumn(name = "location_id", nullable = true)
     private Location location;
 
     private boolean bookable;
-    private double price;
+
+    @ManyToMany
+    @JoinTable(name = "show_price",
+            joinColumns = @JoinColumn(name = "show_id"),
+            inverseJoinColumns = @JoinColumn(name = "price_id"))
+    private List<Price> prices = new ArrayList<>();
 
     /**
      * Date de création du spectacle
      */
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     /**
      * Date de modification du spectacle
      */
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(targetEntity=Representation.class, mappedBy="show")
+    @OneToMany(targetEntity = Representation.class, mappedBy = "show")
     private List<Representation> representations = new ArrayList<>();
 
     @ManyToMany(mappedBy = "shows")
     private List<ArtistType> artistTypes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
-    public Show() { }
 
-    public Show(String title, String description, String posterUrl, Location location, boolean bookable,
-                double price) {
+    public Show() {
+    }
+
+    public Show(String title, String description, String posterUrl, Location location, boolean bookable, List<Price> prices, List<Representation> representations) {
         Slugify slg = new Slugify();
 
         this.slug = slg.slugify(title);
@@ -64,11 +74,11 @@ public class Show {
         this.posterUrl = posterUrl;
         this.location = location;
         this.bookable = bookable;
-        this.price = price;
+        this.prices = prices;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = null;
+        this.representations = representations;
     }
-
 
     public Long getId() {
         return id;
@@ -115,9 +125,9 @@ public class Show {
     }
 
     public void setLocation(Location location) {
-        this.location.removeShow(this);	//déménager de l’ancien lieu
+        this.location.removeShow(this);    //déménager de l’ancien lieu
         this.location = location;
-        this.location.addShow(this);		//emménager dans le nouveau lieu
+        this.location.addShow(this);        //emménager dans le nouveau lieu
     }
 
     public boolean isBookable() {
@@ -128,12 +138,12 @@ public class Show {
         this.bookable = bookable;
     }
 
-    public double getPrice() {
-        return price;
+    public List<Price> getPrices() {
+        return prices;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -153,7 +163,7 @@ public class Show {
     }
 
     public Show addRepresentation(Representation representation) {
-        if(!this.representations.contains(representation)) {
+        if (!this.representations.contains(representation)) {
             this.representations.add(representation);
             representation.setShow(this);
         }
@@ -162,9 +172,9 @@ public class Show {
     }
 
     public Show removeRepresentation(Representation representation) {
-        if(this.representations.contains(representation)) {
+        if (this.representations.contains(representation)) {
             this.representations.remove(representation);
-            if(representation.getLocation().equals(this)) {
+            if (representation.getLocation().equals(this)) {
                 representation.setLocation(null);
             }
         }
@@ -180,7 +190,7 @@ public class Show {
     }
 
     public Show addArtistType(ArtistType artistType) {
-        if(!this.artistTypes.contains(artistType)) {
+        if (!this.artistTypes.contains(artistType)) {
             this.artistTypes.add(artistType);
             artistType.addShow(this);
         }
@@ -189,7 +199,7 @@ public class Show {
     }
 
     public Show removeArtistType(ArtistType artistType) {
-        if(this.artistTypes.contains(artistType)) {
+        if (this.artistTypes.contains(artistType)) {
             this.artistTypes.remove(artistType);
             artistType.getShows().remove(this);
         }
@@ -199,20 +209,10 @@ public class Show {
 
     @Override
     public String toString() {
-        return "Show{" +
-                "id=" + id +
-                ", slug='" + slug + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", posterUrl='" + posterUrl + '\'' +
-                ", location=" + location +
-                ", bookable=" + bookable +
-                ", price=" + price +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", representations=" + representations +
-                ", artistTypes=" + artistTypes +
-                '}';
+        return "Show [id=" + id + ", slug=" + slug + ", title=" + title
+                + ", description=" + description + ", posterUrl=" + posterUrl + ", location="
+                + location + ", bookable=" + bookable + ", prices=" + prices.size()
+                + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", representations=" + representations.size() + "]";
     }
-}
 
+}

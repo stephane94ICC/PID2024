@@ -4,26 +4,31 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
+@Data
+@NoArgsConstructor // (force = true, access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="artists")
+@Table(name = "artists")
 public class Artist {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NotBlank(message = "The firstname must not be empty.")
+    @Size(min = 2, max = 60, message = "The firstname must be between 2 and 60 characters long.")
     private String firstname;
+
+    @NotBlank(message = "The lastname must not be empty.")
+    @Size(min = 2, max = 60, message = "The firstname must be between 2 and 60 characters long.")
     private String lastname;
 
     @ManyToMany(mappedBy = "artists")
     private List<Type> types = new ArrayList<>();
 
-    public Artist() {}
-
-    public Artist(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-
+    // Problème avec lombok !
     public Long getId() {
         return id;
     }
@@ -32,16 +37,8 @@ public class Artist {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
     public String getLastname() {
         return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
     }
 
     public List<Type> getTypes() {
@@ -49,7 +46,7 @@ public class Artist {
     }
 
     public Artist addType(Type type) {
-        if(!this.types.contains(type)) {
+        if (!this.types.contains(type)) {
             this.types.add(type);
             type.addArtist(this);
         }
@@ -58,7 +55,7 @@ public class Artist {
     }
 
     public Artist removeType(Type type) {
-        if(this.types.contains(type)) {
+        if (this.types.contains(type)) {
             this.types.remove(type);
             type.getArtists().remove(this);
         }

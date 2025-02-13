@@ -1,20 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout" layout:decorate="~{layouts/main}">
+<html lang="fr" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
 <head>
-    <title th:text="${title}">Page d'accueil</title>
+    <title>Accueil</title>
 </head>
 <body>
 <div class="container">
+    <div id="notification" th:replace="~{main :: notification}"></div>
     <div layout:fragment="content">
-        <h1>Bienvenue sur la page d'accueil</h1>
-
-        <div class="actions">
-            <a th:href="@{/artists/}">Voir la liste des artistes</a>
-            <a th:href="@{/artists/create}">Créer un nouvel artiste</a>
-        </div>
-        <div class="login-link">
-            <a th:href="@{/login}">Se connecter</a>
-        </div>
+        <h2>Projet Réservations - Accueil</h2>
     </div>
 </div>
 </body>

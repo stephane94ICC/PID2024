@@ -99,12 +99,7 @@ public class Representation {
 
     @Override
     public String toString() {
-        return "Representation{" +
-                "id=" + id +
-                ", show=" + show +
-                ", when=" + when +
-                ", location=" + location +
-                ", users=" + users +
-                '}';
+        return "Representation [id=" + id + ", show=" + show + ", when=" + when
+                + ", location=" + location + "]";
     }
 }
